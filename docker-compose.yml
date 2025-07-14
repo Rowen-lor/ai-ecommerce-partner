@@ -1,0 +1,28 @@
+# Basic n8n-docker-compose.yml
+#
+# This is a basic configuration for n8n. It uses a local folder for the
+# database and n8n data. It is not recommended for production use.
+#
+# See https://docs.n8n.io/hosting/deployment/docker-compose/ for more advanced
+# and production-ready examples.
+
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=development
+      # See https://docs.n8n.io/hosting/environment-variables/ for more options
+      # - WEBHOOK_TUNNEL_URL=https://n8n.my-domain.com/
+    volumes:
+      - ./n8n-data:/home/node/.n8n
+
+volumes:
+  n8n-data:

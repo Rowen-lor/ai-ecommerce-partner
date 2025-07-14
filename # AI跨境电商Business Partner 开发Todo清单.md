@@ -11,7 +11,7 @@
 ## 📅 Week 1: 基础架构 + 选品Agent
 
 ### Day 1-2: 项目初始化 🚀
-- [ ] 创建GitHub仓库 `ai-ecommerce-partner`
+- [x] 创建GitHub仓库 `ai-ecommerce-partner` (已创建并推送首次提交: https://github.com/Rowen-lor/ai-ecommerce-partner.git)
 - [x] 初始化项目结构 (backend目录已创建)
   ```
   ai-ecommerce-partner/
@@ -30,9 +30,9 @@
   - [ ] 配置VSCode插件（ES7 React/Redux/GraphQL, Prettier）
 - [x] 创建基础配置文件
   - [x] `.env` (已创建并配置DeepSeek API)
-  - [ ] `.gitignore`
+  - [x] `.gitignore`
   - [x] `backend/package.json`
-  - [ ] `docker-compose.yml`
+  - [x] `docker-compose.yml`
 
 ### Day 3-4: n8n环境搭建 🔧
 - [ ] 安装配置n8n
@@ -40,9 +40,9 @@
   - [ ] 配置n8n基础设置
   - [ ] 测试n8n webhook功能
 - [ ] 创建基础工作流模板
-  - [ ] `product-research.json` - 选品工作流
-  - [ ] `listing-generator.json` - Listing生成工作流
-  - [ ] `seo-optimizer.json` - SEO优化工作流
+  - [x] `product-research.json` - 选品工作流
+  - [x] `listing-generator.json` - Listing生成工作流
+  - [x] `seo-optimizer.json` - SEO优化工作流
 - [x] 配置OpenAI API (已切换为DeepSeek API)
   - [ ] 注册OpenAI账号
   - [ ] 获取API Key
