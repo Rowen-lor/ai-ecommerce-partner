@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 跨境电商 Business Partner (专业版演示)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #1e3799;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --white: #fff;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--white);
+            padding: 20px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            color: var(--secondary-color);
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        
+        header p {
+            text-align: center;
+            font-size: 1.1em;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--medium-gray);
+            margin-bottom: 25px;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #6c757d;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .tab-button.active {
+            color: var(--primary-color);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-button:disabled {
+            color: #adb5bd;
+            cursor: not-allowed;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .input-group input { width: calc(100% - 26px); padding: 12px; font-size: 1em; border: 1px solid #ccc; border-radius: 6px; }
+
+        button.primary-btn {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--white);
+            background-image: linear-gradient(to right, #007bff, #0056b3);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        }
+        
+        button.primary-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3); }
+        button.primary-btn:disabled { background-image: none; background-color: #9fa8da; cursor: not-allowed; }
+
+        .results-container { margin-top: 20px; padding: 5px; background-color: #fdfdff; border-radius: 8px; min-height: 100px; }
+        h2 { color: var(--secondary-color); border-bottom: 2px solid var(--medium-gray); padding-bottom: 10px; }
+        .loader { text-align: center; padding: 50px; font-size: 1.3em; color: #6c757d; }
+
+        /* Custom Styles for Tabs */
+        .opportunity-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .opportunity-card h3 { margin-top: 0; color: var(--primary-color); font-size: 1.5em; }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .data-item { background: var(--white); padding: 15px; border-radius: 8px; text-align: center; }
+        .data-item .value { font-size: 1.8em; font-weight: bold; color: var(--dark-gray); }
+        .data-item .label { font-size: 0.9em; color: #6c757d; }
+        .profit-analysis { background-color: #e6f7ff; border: 1px solid #91d5ff; padding: 15px; border-radius: 8px; }
+        .sourcing-btn { 
+            display: inline-block; text-decoration: none; background-color: #ff9900; color: white; padding: 10px 20px; 
+            border-radius: 5px; font-weight: bold; margin-top: 15px;
+        }
+
+        /* Amazon Listing Styles */
+        .amazon-listing-container { padding-top: 20px; }
+        .amazon-listing-top { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+        .image-gallery .main-image { width: 100%; border-radius: 8px; }
+        .thumbnails { display: flex; gap: 10px; margin-top: 10px; }
+        .thumb { width: 60px; height: 60px; object-fit: cover; border: 2px solid transparent; border-radius: 4px; cursor: pointer; }
+        .thumb.active { border-color: var(--primary-color); }
+        .product-details .title { font-size: 1.8em; margin-top: 0; }
+        .product-details .brand { color: var(--primary-color); }
+        .product-details .stars { color: #f89d28; }
+        .product-details .price { font-size: 2em; color: #b12704; }
+        .product-details .bullet-points { padding-left: 20px; }
+        .product-details .bullet-points li { margin-bottom: 10px; }
+        
+        .amazon-listing-description { margin-top: 40px; border-top: 1px solid var(--medium-gray); padding-top: 20px; }
+        .description-module { display: flex; align-items: center; gap: 30px; margin-bottom: 30px; }
+        .description-module:nth-child(even) { flex-direction: row-reverse; }
+        .desc-text { flex: 1; }
+        .desc-text h4 { font-size: 1.4em; color: var(--dark-gray); }
+        .desc-image { flex: 1; max-width: 400px; }
+        .desc-image img { width: 100%; border-radius: 8px; }
+
+
+        /* SEO Styles */
+        .seo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .seo-card { padding: 20px; border-radius: 8px; background-color: var(--light-gray); }
+        .seo-card h3 { margin-top: 0; }
+        .keyword-table { width: 100%; }
+        .keyword-table td, .keyword-table th { padding: 8px; border-bottom: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-rocket"></i> AI 跨境电商 Business Partner</h1>
+            <p>一个集成了选品、Listing生成和SEO优化的全流程AI助手 (专业版演示)</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="1">1. 市场机会分析</button>
+            <button class="tab-button" data-tab="2" disabled>2. AI Listing 生成</button>
+            <button class="tab-button" data-tab="3" disabled>3. AI SEO 策略</button>
+        </div>
+
+        <!-- Tab 1: Market Opportunity Analysis -->
+        <div id="tab-1" class="tab-content active">
+            <div class="input-group">
+                <label for="category-input">输入产品关键词或品类 (例如: portable bluetooth speaker)</label>
+                <input type="text" id="category-input" value="portable bluetooth speaker">
+            </div>
+            <button class="primary-btn" id="analyze-btn">开始分析</button>
+            <div class="results-container" id="research-results">
+                <p style="text-align:center; color: #6c757d;">请点击“开始分析”以发现利基市场机会。</p>
+            </div>
+        </div>
+
+        <!-- Tab 2: Listing Generation -->
+        <div id="tab-2" class="tab-content">
+            <h2>Amazon Listing 预览</h2>
+            <button class="primary-btn" id="generate-listing-btn">为选中产品生成 Listing 页面</button>
+            <div class="results-container" id="listing-results">
+                 <p style="text-align:center; color: #6c757d;">请先在“市场机会分析”中选择一个产品。</p>
+            </div>
+        </div>
+
+        <!-- Tab 3: SEO Optimization -->
+        <div id="tab-3" class="tab-content">
+            <h2>SEO & 广告策略</h2>
+            <button class="primary-btn" id="optimize-seo-btn">为选中产品生成 SEO 策略</button>
+            <div class="results-container" id="seo-results">
+                <p style="text-align:center; color: #6c757d;">请先在“市场机会分析”中选择一个产品。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- MOCK DATA ---
+        const mockApi = {
+            getProductOpportunities: (keywords) => {
+                const productData = {
+                    id: 1,
+                    name: "便携式蓝牙音箱",
+                    category: "消费电子",
+                    competitors: {
+                        count: 2500,
+                        avgPrice: 35.99,
+                        avgReviews: 4500,
+                    },
+                    market: {
+                        searchVolume: "75,000/月",
+                        growth: "15% (YoY)",
+                        seasonality: "夏季和假日季高峰",
+                    },
+                    profit: {
+                        sourcingCost: 8.50,
+                        estimatedMargin: "45-55%",
+                    },
+                    sourcingLink: `https://www.1688.com/selloffer/offer_search.htm?keywords=${encodeURIComponent("portable bluetooth speaker")}`
+                };
+                return productData;
+            },
+            getListingContent: (productId) => ({
+                title: "便携式蓝牙音箱 - IPX7防水，24小时播放，震撼低音，内置麦克风，适用于家庭、户外、旅行 (黑色)",
+                brand: "SoundWave",
+                rating: 4.7,
+                reviews: 12580,
+                price: 32.99,
+                images: [
+                    "https://i.imgur.com/g83n2S0.jpeg", // Main image
+                    "https://i.imgur.com/g83n2S0.jpeg",
+                    "https://i.imgur.com/g83n2S0.jpeg",
+                    "https://i.imgur.com/g83n2S0.jpeg",
+                    "https://i.imgur.com/g83n2S0.jpeg"
+                ],
+                features: [
+                    "【震撼人心的音质】采用先进的数字信号处理技术，无论音量大小，都能提供丰富、清晰、零失真的音效。双无源辐射器增强低音效果，让每个节拍都充满力量。",
+                    "【IPX7级全方位防水】无惧雨水、泼溅甚至完全浸入水中。非常适合在海滩、泳池、浴室或船上使用，让音乐无处不在。",
+                    "【超长24小时续航】内置高效能锂离子电池，一次充电即可享受长达24小时（约500首歌曲）不间断的音乐播放，满足您一整天的需求。",
+                    "【稳定的蓝牙5.0连接】采用最新的蓝牙5.0技术，提供长达100英尺的稳定连接范围。轻松配对您的智能手机、平板电脑或其他蓝牙设备。",
+                    "【内置麦克风与便携设计】高清降噪麦克风让您免提通话清晰无比。轻巧紧凑的设计，配有挂绳，方便您随身携带，随时随地享受音乐。"
+                ],
+                description: [
+                    {
+                        title: "随时随地，享受音乐",
+                        text: "无论您是在家放松、在户外探险还是在旅途中，SoundWave音箱都能为您带来无与伦比的听觉盛宴。其轻巧的设计和坚固的外壳，使其成为您完美的音乐伴侣。",
+                        image: "https://i.imgur.com/g83n2S0.jpeg"
+                    },
+                    {
+                        title: "为派对注入活力",
+                        text: "强大的低音和清晰的高音，足以点燃任何派对的气氛。通过TWS功能，您可以将两个SoundWave音箱配对，实现真正的立体声环绕效果，让快乐加倍。",
+                        image: "https://i.imgur.com/g83n2S0.jpeg"
+                    }
+                ]
+            }),
+            getSeoStrategy: (productId) => ({
+                keywords: [
+                    { term: "portable bluetooth speaker", intent: "购买", type: "核心" },
+                    { term: "waterproof bluetooth speaker", intent: "功能", type: "核心" },
+                    { term: "loud bluetooth speaker", intent: "功能", type: "核心" },
+                    { term: "best portable speaker for travel", intent: "研究", type: "长尾" },
+                    { term: "small speaker with long battery life", intent: "研究", type: "长尾" }
+                ],
+                adGroups: [
+                    { name: "SP-自动投放", type: "自动", dailyBudget: "$20", acosTarget: "30%" },
+                    { name: "SP-关键词-广泛", type: "手动", dailyBudget: "$30", acosTarget: "35%" },
+                    { name: "SP-竞品定位", type: "手动", dailyBudget: "$25", acosTarget: "40%" }
+                ]
+            })
+        };
+
+        // --- DOM & State ---
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        let selectedProduct = null;
+
+        // --- UI LOGIC ---
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (tab.disabled) return;
+                tabs.forEach(item => item.classList.remove('active'));
+                tab.classList.add('active');
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+            });
+        });
+        
+        const showLoader = (containerId) => {
+            document.getElementById(containerId).innerHTML = '<div class="loader"><i class="fas fa-brain fa-spin"></i> AI 正在深度分析中...</div>';
+        };
+
+        // --- Event Listeners ---
+
+        // Tab 1: Market Analysis
+        document.getElementById('analyze-btn').addEventListener('click', () => {
+            const keywords = document.getElementById('category-input').value;
+            showLoader('research-results');
+
+            setTimeout(() => {
+                const data = mockApi.getProductOpportunities(keywords);
+                const container = document.getElementById('research-results');
+                container.innerHTML = `
+                    <div class="opportunity-card">
+                        <h3>市场机会分析报告: ${data.name}</h3>
+                        <div class="data-grid">
+                            <div class="data-item"><div class="value">${data.market.searchVolume}</div><div class="label">月搜索量</div></div>
+                            <div class="data-item"><div class="value">${data.market.growth}</div><div class="label">市场增长</div></div>
+                            <div class="data-item"><div class="value">$${data.competitors.avgPrice}</div><div class="label">竞品均价</div></div>
+                            <div class="data-item"><div class="value">${data.competitors.avgReviews}</div><div class="label">竞品平均Review数</div></div>
+                        </div>
+                        <div class="profit-analysis">
+                            <h4><i class="fas fa-dollar-sign"></i> 利润潜力分析</h4>
+                            <p><strong>预估1688采购成本:</strong> $${data.profit.sourcingCost.toFixed(2)}</p>
+                            <p><strong>预估利润空间:</strong> ${data.profit.estimatedMargin}</p>
+                        </div>
+                        <a href="${data.sourcingLink}" target="_blank" class="sourcing-btn"><i class="fas fa-shopping-cart"></i> 在1688上搜索货源</a>
+                    </div>
+                `;
+                selectedProduct = data;
+                document.querySelector('.tab-button[data-tab="2"]').disabled = false;
+                document.querySelector('.tab-button[data-tab="3"]').disabled = false;
+                alert(`✅ 市场机会分析完成！现在可以生成Listing和SEO策略了。`);
+            }, 2000);
+        });
+
+        // Tab 2: Listing Generation
+        document.getElementById('generate-listing-btn').addEventListener('click', () => {
+            if (!selectedProduct) { alert("请先在“市场机会分析”中分析一个产品。"); return; }
+            showLoader('listing-results');
+
+            setTimeout(() => {
+                const content = mockApi.getListingContent(selectedProduct.id);
+                const container = document.getElementById('listing-results');
+                container.innerHTML = `
+                    <div class="amazon-listing-container">
+                        <div class="amazon-listing-top">
+                            <div class="image-gallery">
+                                <img src="${content.images[0]}" class="main-image" id="main-product-image">
+                                <div class="thumbnails">
+                                    ${content.images.map((img, index) => `<img src="${img}" class="thumb ${index === 0 ? 'active' : ''}">`).join('')}
+                                </div>
+                            </div>
+                            <div class="product-details">
+                                <h3 class="title">${content.title}</h3>
+                                <div class="brand">品牌: <a href="#">${content.brand}</a></div>
+                                <div class="stars">
+                                    ${'<i class="fas fa-star"></i>'.repeat(Math.floor(content.rating))}${'<i class="fas fa-star-half-alt"></i>'.repeat(content.rating % 1 ? 1 : 0)}
+                                    <span>${content.rating} out of 5 stars</span> (${content.reviews.toLocaleString()} ratings)
+                                </div>
+                                <hr>
+                                <div class="price">$${content.price.toFixed(2)}</div>
+                                <h4>关于此商品</h4>
+                                <ul class="bullet-points">
+                                    ${content.features.map(f => `<li>${f}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="amazon-listing-description">
+                            <h2>产品描述</h2>
+                            ${content.description.map(module => `
+                                <div class="description-module">
+                                    <div class="desc-text">
+                                        <h4>${module.title}</h4>
+                                        <p>${module.text}</p>
+                                    </div>
+                                    <div class="desc-image">
+                                        <img src="${module.image}" alt="${module.title}">
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                // Thumbnail click logic
+                container.querySelectorAll('.thumb').forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        container.querySelector('#main-product-image').src = thumb.src;
+                        container.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                        thumb.classList.add('active');
+                    });
+                });
+            }, 2000);
+        });
+        
+        // Tab 3: SEO Strategy
+        document.getElementById('optimize-seo-btn').addEventListener('click', () => {
+             if (!selectedProduct) { alert("请先在“市场机会分析”中分析一个产品。"); return; }
+            showLoader('seo-results');
+
+            setTimeout(() => {
+                const strategy = mockApi.getSeoStrategy(selectedProduct.id);
+                const container = document.getElementById('seo-results');
+                container.innerHTML = `
+                    <div class="seo-grid">
+                        <div class="seo-card">
+                            <h3><i class="fas fa-key"></i> 关键词策略</h3>
+                            <table class="keyword-table">
+                                <tr><th>关键词</th><th>类型</th><th>用户意图</th></tr>
+                                ${strategy.keywords.map(k => `<tr><td>${k.term}</td><td>${k.type}</td><td>${k.intent}</td></tr>`).join('')}
+                            </table>
+                        </div>
+                        <div class="seo-card">
+                            <h3><i class="fas fa-bullhorn"></i> 广告活动建议</h3>
+                             <table class="keyword-table">
+                                <tr><th>广告组</th><th>类型</th><th>日预算</th><th>ACoS目标</th></tr>
+                                ${strategy.adGroups.map(g => `<tr><td>${g.name}</td><td>${g.type}</td><td>${g.dailyBudget}</td><td>${g.acosTarget}</td></tr>`).join('')}
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        });
+
+    </script>
+</body>
+</html>
