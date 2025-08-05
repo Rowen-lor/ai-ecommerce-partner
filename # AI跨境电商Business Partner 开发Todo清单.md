@@ -1,4 +1,4 @@
-# AI跨境电商Business Partner 开发Todo清单
+# README
 
 ## 🎯 项目概述
 - **目标**: 2周内完成AI跨境电商助手Demo
